@@ -1,0 +1,46 @@
+digraph {
+	nodesep=0.8 rankdir=LR ranksep=0.8 splines=line
+	node [fixedsize=true height=0.8 shape=circle style=filled width=0.8]
+	subgraph cluster_input {
+		color=black label="Input Layer" style=dashed
+		X1 [color=lightyellow fontcolor=black]
+		X2 [color=lightyellow fontcolor=black]
+		X3 [color=lightyellow fontcolor=black]
+		X4 [color=lightyellow fontcolor=black]
+	}
+	subgraph cluster_hidden1 {
+		color=blue label="Hidden Layer L1 (tanh)" style=dashed
+		A1_1 [color=skyblue fontcolor=black]
+		A1_2 [color=skyblue fontcolor=black]
+		A1_3 [color=skyblue fontcolor=black]
+	}
+	subgraph cluster_hidden2 {
+		color=green label="Hidden Layer L2 (tanh)" style=dashed
+		A2_1 [color=skyblue fontcolor=black]
+		A2_2 [color=skyblue fontcolor=black]
+	}
+	subgraph cluster_output {
+		color=red label="Output Layer (sigmoid)" style=dashed
+		"Y (Sigmoid)" [color=pink fixedsize=true fontcolor=black height=0.8 width=0.8]
+	}
+	X1 -> A1_1
+	X1 -> A1_2
+	X1 -> A1_3
+	X2 -> A1_1
+	X2 -> A1_2
+	X2 -> A1_3
+	X3 -> A1_1
+	X3 -> A1_2
+	X3 -> A1_3
+	X4 -> A1_1
+	X4 -> A1_2
+	X4 -> A1_3
+	A1_1 -> A2_1
+	A1_1 -> A2_2
+	A1_2 -> A2_1
+	A1_2 -> A2_2
+	A1_3 -> A2_1
+	A1_3 -> A2_2
+	A2_1 -> "Y (Sigmoid)"
+	A2_2 -> "Y (Sigmoid)"
+}

@@ -1,0 +1,83 @@
+---
+title: "9120hw4"
+author: "Ze Li"
+output: 
+  pdf_document:
+    latex_engine: xelatex
+    extra_dependencies: ["fontspec", "amsmath", "amssymb", "unicode-math"]
+---
+
+```{r library}
+
+```
+
+## Question 1
+
+### (a) Suppose Rs = +1. Consider an equiprobable random policy $\pi$ (i.e., all actions equally likely). Implement policy evaluation algorithm to compute $V \pi$. Report the value function on a grid, similar to the example shown on slide 26 of lecture 10.
+
+```{r}
+# Set up the gridworld environment
+n_states <- 16  # Total number of states (0 to 15)
+grid_size <- 4  # Grid size (4x4)
+
+# Define rewards and terminal states
+R <- rep(1, n_states)  # Default reward Rs = 1 for states 1 to 14
+R[1] <- -5  # Ry for death state (state 0)
+R[16] <- 5  # Rb for target state (state 15)
+
+# Termination flags for terminal states
+terminal_states <- c(0, 15)
+
+# Discount factor and initial value function
+gamma <- 1
+V <- rep(0, n_states)
+
+# Actions (up, down, left, right)
+actions <- list(c(0, 1), c(0, -1), c(1, 0), c(-1, 0))
+
+# Function to get the next state based on action
+get_next_state <- function(state, action) {
+  row <- (state - 1) %/% grid_size + 1
+  col <- (state - 1) %% grid_size + 1
+  next_row <- row + action[1]
+  next_col <- col + action[2]
+  
+  # Ensure the move stays within bounds
+  if (next_row < 1 || next_row > grid_size || next_col < 1 || next_col > grid_size) {
+    return(state)  # If the move is out of bounds, stay in the same state
+  } else {
+    return((next_row - 1) * grid_size + next_col)
+  }
+}
+
+# policy Evaluation Loop
+threshold <- 1e-6  # convergence threshold
+delta <- Inf
+iteration <- 0
+
+while (delta > threshold) {
+  delta <- 0
+  V_new <- V
+  
+  for (state in 1:n_states) {
+    if (state %in% terminal_states) {
+      next
+    }
+    
+    value_sum <- 0
+    for (action in actions) {
+      next_state <- get_next_state(state, action)
+      value_sum <- value_sum + 0.25 * (R[state] + gamma * V[next_state])
+    }
+    
+    V_new[state] <- value_sum
+    delta <- max(delta, abs(V_new[state] - V[state]))
+  }
+  
+  V <- V_new
+  iteration <- iteration + 1
+}
+
+matrix(V, nrow = grid_size, byrow = TRUE)
+```
+
